@@ -1,0 +1,47 @@
+
+HOW TO RUN MY TEST PROMPT (IN MAIN)----------
+
+java -jar GuildQuest.jar
+
+
+OR
+
+open terminal
+cd src
+javac *.java
+java Main
+
+
+
+
+Requirement Checklist:
+A: 5/5
+
+1. Supports game time using days,hours,minutes using a World Clock
+2. Support for multiple users with mulitple campaigns.
+3. Users can add, remove, update campagins. 
+4. A campain may contain a quest event (qe has all 3 required things)
+5. User can add, remove and update qes
+
+
+B: 1/2
+ 7. Both local and world time display suported
+
+
+C: 1/2
+
+8. Setting s screen - change realm, theme, and time display pref
+
+
+D : 0/3
+
+
+E: 3/4
+
+13. Supports characters, with attributes like name, class level
+
+15. Supports inventory with add/remove (i didnt do update so 2/3 of it is done)
+
+16. A quest event can grant/remove inv items
+
+Total : 10/16 which meets 50% threshold

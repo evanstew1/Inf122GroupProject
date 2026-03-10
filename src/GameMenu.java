@@ -109,7 +109,5 @@ public class GameMenu {
     }
 
     private void prepareMiniAdventure() {
-        //select realm
-        System.out.pritnln("")
     }
 }

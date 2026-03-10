@@ -6,6 +6,8 @@ public class Character {
     private String characterClass;
     private int level;
     private Inventory  inventory;
+    private int x = 0;
+    private int y = 0;
 
     //initalize character
     public Character(String name, String characterClass, int level){
@@ -43,5 +45,30 @@ public class Character {
 
     public void removeItem(String itemName){
         this.inventory.removeInventoryItemName(itemName);
+    }
+
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+
+    public void movePosition(int moveX, int moveY){
+        int newX = this.x + moveX;
+        int newY = this.y + moveY;
+
+        if (newX >= 0 && newX < 100){
+            this.x = newX;
+        }
+
+        if(newY >= 0 && newY < 100){
+            this.y = newY;
+        }
     }
 }

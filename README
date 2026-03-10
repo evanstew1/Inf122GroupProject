@@ -1,12 +1,11 @@
 
 HOW TO RUN MY TEST PROMPT (IN MAIN)----------
 
-java -jar MyProject.jar
+NEED TO MAKE JAR BEFORE SUBMISSION
 
 
 OR
 
 open terminal
-cd src
-javac *.java
-java Main
+javac -d bin src/*.java
+java -cp bin Main

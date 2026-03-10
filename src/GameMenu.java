@@ -107,4 +107,9 @@ public class GameMenu {
             Thread.currentThread().interrupt();
         }
     }
+
+    private void prepareMiniAdventure() {
+        //select realm
+        System.out.pritnln("")
+    }
 }

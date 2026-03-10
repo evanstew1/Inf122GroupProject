@@ -7,6 +7,7 @@ public class User{
     private List<Campaign> archived;
     private List<Character> characters;
     private Settings settings;
+    private List<String> matchHistory = new ArrayList<>();
 
     public User(int userID){
         this.userID = userID;
@@ -54,5 +55,13 @@ public class User{
 
     public List<Character> getCharacters() {
         return characters;
+    }
+
+    public void recordMatch(String result){
+        this.matchHistory.add(result);
+    }
+
+    public List<String> getMatchHistory(){
+        return matchHistory;
     }
 }

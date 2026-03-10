@@ -1,6 +1,6 @@
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GameMenu {
     private Scanner scanner = new Scanner(System.in);
@@ -70,7 +70,8 @@ public class GameMenu {
         System.out.println("1. Campaign Menu");
         System.out.println("2. Character Menu");
         System.out.println("3. Settings");
-        System.out.println("4. Logout");
+        System.out.println("4. Mini Adventure");
+        System.out.println("5. Logout");
         System.out.println("Selection(press # to select): ");
         boolean selected = false;
 
@@ -79,7 +80,8 @@ public class GameMenu {
             case 1 -> new CampaignMenu(scanner, currentUser).startMenu();
             case 2 -> new CharacterMenu(scanner, currentUser).startMenu();
             case 3 -> new SettingsMenu(scanner, currentUser).startMenu();
-            case 4 -> {
+            case 4 -> prepareMiniAdventure();
+            case 5 -> {
                 currentUser = null;
                 return;
             }
@@ -109,5 +111,43 @@ public class GameMenu {
     }
 
     private void prepareMiniAdventure() {
+        System.out.println("\n ----- MINI ADVENTURE SELECT -----");
+        System.out.println("1. Timed Raid Window");
+        System.out.println("2. Back");
+        System.out.print("Choice: ");
+        
+        String choice = scanner.nextLine();
+        if (choice.equals("2")) return;
+
+        if (choice.equals("1")) {
+            if (userSlots.size() < 2) {
+                System.out.println("There must be at least two users to proceed.");
+                waitSeconds(2);
+                return;
+            }
+
+            System.out.println("\nSelect User Slot for Player 2:");
+            for (int i = 0; i < userSlots.size(); i++) {
+                if (userSlots.get(i) != currentUser) {
+                    System.out.println((i + 1) + ". User: " + userSlots.get(i).getUserID());
+                }
+            }
+            System.out.print("Selection: ");
+            
+            try {
+                int p2Index = Integer.parseInt(scanner.nextLine()) - 1;
+                User p2 = userSlots.get(p2Index);
+
+                if (p2 == currentUser) {
+                    System.out.println("Player 1 and Player 2 Cannot be the Same.");
+                } else {
+                    TimedRaidWindow raid = new TimedRaidWindow();
+                    raid.initializePlayers(currentUser, p2);
+                    raid.startGame();
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid selection. Returning to menu.");
+            }
+        }
     }
 }

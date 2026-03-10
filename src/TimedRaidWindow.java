@@ -7,9 +7,9 @@ public class TimedRaidWindow implements MiniAdventure {
     private User p2;
 
     private String[] monsterNames = {"Hadeon", "The Cursed Archon (Boss)"};
-    private int[] monsterHealths = {500, 1000}; 
+    private int[] monsterHealths = {500, 600}; 
     private int currentMonsterIndex = 0;
-    private int timeLimitMinutes = 4;
+    private int timeLimitMinutes = 10;
 
     @Override
     public String getName() {
@@ -24,6 +24,7 @@ public class TimedRaidWindow implements MiniAdventure {
 
     @Override
     public void startGame() {
+        Realm raidRealm = p1.getSettings().getCurrentRealm();
         Scanner scanner = new Scanner(System.in);
         boolean Player1Turn = true;
 
@@ -33,10 +34,14 @@ public class TimedRaidWindow implements MiniAdventure {
         int p1Health = 200;
         int p2Health = 200;
 
-        Realm raidRealm = p1.getSettings().getCurrentRealm();
-        WorldClockTime globalClock = new WorldClockTime(0, 0, 0);
+        WorldClockTime globalClock = WorldClockTime.getInstance();
+        globalClock.syncWithRealTime();
 
-        System.out.println("\n--- RAID START: Clear the dungeon in " + raidRealm.getName() + " in " + timeLimitMinutes + " minutes! ---");
+        RealmLocalTime startLocalTime = new RealmLocalTime(0, 0, 0, raidRealm.getLocalTimeOffset());
+        startLocalTime.updateTime(globalClock);
+        int startTotalMinutes = (startLocalTime.getDays() * 1440) + (startLocalTime.getHours() * 60) + startLocalTime.getMinutes();
+
+        System.out.println("\n--- Clear the dungeon in " + raidRealm.getName() + " in " + timeLimitMinutes + " minutes! ---");
         System.out.println("Good luck " + character1.getName() + " and " + character2.getName() + "!");
 
         while (currentMonsterIndex < monsterNames.length) {
@@ -56,10 +61,13 @@ public class TimedRaidWindow implements MiniAdventure {
             }
 
             globalClock.syncWithRealTime();
-            RealmLocalTime currentLocalTime = new RealmLocalTime(0, 0, 0, raidRealm.getLocalTimeRule());
+            RealmLocalTime currentLocalTime = new RealmLocalTime(0, 0, 0, raidRealm.getLocalTimeOffset());
             currentLocalTime.updateTime(globalClock);
 
-            if (currentLocalTime.minutes >= timeLimitMinutes) {
+            int currentTotalMinutes = (currentLocalTime.days * 1440) + (currentLocalTime.hours * 60) + currentLocalTime.minutes;
+            int minutesElapsed = currentTotalMinutes - startTotalMinutes;
+
+            if (minutesElapsed >= timeLimitMinutes) {
                 System.out.println("\nTime's Up! You Lose");
                 return;
             }
@@ -67,17 +75,19 @@ public class TimedRaidWindow implements MiniAdventure {
             String currentTarget = monsterNames[currentMonsterIndex];
             int currentMonsterHealth = monsterHealths[currentMonsterIndex];
 
-            System.out.println("\nTarget: " + currentTarget + " | Health: " + currentMonsterHealth + " | Time Elapsed: " + currentLocalTime.minutes + "/" + timeLimitMinutes);
+            System.out.println("\nTarget: " + currentTarget + " | Health: " + currentMonsterHealth + " | Time Elapsed: " + minutesElapsed + "/" + timeLimitMinutes + " Minutes");
 
             Character currentCharacter = Player1Turn ? character1 : character2;
-            System.out.print("[" + currentCharacter.getCharacterClass() + "] " + currentCharacter.getName() + ", type 'A' to attack ");
+            System.out.print("[" + currentCharacter.getCharacterClass() + "] " + currentCharacter.getName() + ", type 'A' to attack: ");
 
             String action = scanner.nextLine().trim().toUpperCase();
 
             globalClock.syncWithRealTime();
             currentLocalTime.updateTime(globalClock);
-            if (currentLocalTime.minutes >= timeLimitMinutes) {
-                System.out.println("Time's Up! You Lose");
+            int postActionMinutes = (currentLocalTime.days * 1440) + (currentLocalTime.hours * 60) + currentLocalTime.minutes;
+            
+            if ((postActionMinutes - startTotalMinutes) >= timeLimitMinutes) {
+                System.out.println("Time's Up! You Lose.");
                 return;
             }
 
@@ -91,6 +101,14 @@ public class TimedRaidWindow implements MiniAdventure {
                 if (monsterHealths[currentMonsterIndex] <= 0) {
                     System.out.println("----- " + currentTarget + " has been eliminated! -----");
                     currentMonsterIndex++;
+
+                    if (currentMonsterIndex < monsterNames.length) { // Only heal if there is another monster coming
+                        p1Health = 200; // Reset Player 1 to full
+                        p2Health = 200; // Reset Player 2 to full
+                        System.out.println("\nYou're back to full health!");
+                        System.out.println("Prepare for the next battle...");
+                    }
+
                 } else {
                     int monsterDamage = rand.nextInt(30) + 21;
                     System.out.println(currentTarget + " hits " + currentCharacter.getName() + " for " + monsterDamage + " damage!");
@@ -117,7 +135,7 @@ public class TimedRaidWindow implements MiniAdventure {
         character1.addItem(bossLoot);
         character2.addItem(bossLoot);
 
-        System.out.println("The raid boss dropped " + bossLoot + " both characters acquire item!");
+        System.out.println("The raid boss dropped " + bossLoot + "! Acquired by both users!");
     }
 
     private Character selectCharacter(User u, Scanner scanner) {

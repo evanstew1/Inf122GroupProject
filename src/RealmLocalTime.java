@@ -21,5 +21,17 @@ public class RealmLocalTime extends Time {
             this.days += this.hours/24;
             this.hours %= 24;
         }
-    };
+    }
+
+    public int getDays() {
+        return this.days;
+    }
+
+    public int getHours() {
+        return this.hours;
+    }
+
+    public int getMinutes() {
+        return this.minutes;
+    }
 }

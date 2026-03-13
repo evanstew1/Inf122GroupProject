@@ -32,37 +32,65 @@ public class GameMenu {
         System.out.println("6. Delete a User");
         System.out.println("7. Exit Game");
 
-        while(!valid) {
-            int selection = Integer.parseInt(scanner.nextLine());
-            //From 1 to max intialized users
-            if(selection >= 1 && selection <= userSlots.size()) {
-                currentUser = userSlots.get(selection - 1);
-                valid = true;
-            } else if (selection == 5) {
-                if(userSlots.size() < MAX_SLOTS) {
-                    User newUser = new User(userSlots.size() + 1);
-                    userSlots.add(newUser);
-                    System.out.println("User Created and Logged In!");
-                } else {
-                    System.out.println("Error: All 4 slots are full");
+        while (!valid) {
+            try {
+                // Read the line and remove any accidental leading/trailing spaces
+                String input = scanner.nextLine().trim();
+
+                // If the user just pressed Enter, skip to the catch block manually or handle here
+                if (input.isEmpty()) {
+                    System.out.println("ERROR: No input detected. Please enter a number.");
+                    continue;
                 }
-                valid = true;
-            } else if (selection == 6) {
-                System.out.println("Enter User Slot to delete (1-4)");
-                int toDel = Integer.parseInt(scanner.nextLine());
-                if(toDel > 0 && toDel <= userSlots.size()) {
-                     userSlots.remove(toDel - 1);
+
+                int selection = Integer.parseInt(input);
+
+                // 1. Handle selection of existing User Slots
+                if (selection >= 1 && selection <= userSlots.size()) {
+                    currentUser = userSlots.get(selection - 1);
+                    valid = true;
+                } 
+                // 2. Create New User
+                else if (selection == 5) {
+                    if (userSlots.size() < MAX_SLOTS) {
+                        User newUser = new User(userSlots.size() + 1);
+                        userSlots.add(newUser);
+                        System.out.println("User Created");
+                    } else {
+                        System.out.println("Error: All 4 slots are full");
+                    }
+                    valid = true;
+                } 
+                // 3. Delete a User
+                else if (selection == 6) {
+                    System.out.println("Enter User Slot to delete (1-4):");
+                    try {
+                        int toDel = Integer.parseInt(scanner.nextLine().trim());
+                        if (toDel > 0 && toDel <= userSlots.size()) {
+                            userSlots.remove(toDel - 1);
+                            System.out.println("User removed.");
+                        } else {
+                            System.out.println("Invalid slot number.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("ERROR: Invalid slot format.");
+                    }
+                } 
+                // 4. Exit Game
+                else if (selection == 7) {
+                    valid = true;
+                    System.out.println("Exiting GuildQuest...");
+                    System.exit(0);
+                } 
+                else {
+                    System.out.println("ERROR: Selection out of range. Try again.");
+                    waitSeconds(1);
                 }
-                valid = true;
-            } else if (selection == 7) {
-                valid = true;
-                System.exit(0);
-            } else {
-                System.out.println("ERROR: Invalid input try again");
-                waitSeconds(2);
+
+            } catch (NumberFormatException e) {
+                System.out.println("ERROR: Invalid input. Please enter a valid number (1-7).");
             }
-        }
-    }
+        }}
 
     private void showMainMenu() {
         displayBanner();

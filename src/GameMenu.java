@@ -113,13 +113,14 @@ public class GameMenu {
     private void prepareMiniAdventure() {
         System.out.println("\n ----- MINI ADVENTURE SELECT -----");
         System.out.println("1. Timed Raid Window");
-        System.out.println("2. Back");
+        System.out.println("2. Relic Hunt");
+        System.out.println("3. Back");
         System.out.print("Choice: ");
         
         String choice = scanner.nextLine();
-        if (choice.equals("2")) return;
+        if (choice.equals("3")) return;
 
-        if (choice.equals("1")) {
+        if (choice.equals("1") || choice.equals("2")) {
             if (userSlots.size() < 2) {
                 System.out.println("There must be at least two users to proceed.");
                 waitSeconds(2);
@@ -140,10 +141,14 @@ public class GameMenu {
 
                 if (p2 == currentUser) {
                     System.out.println("Player 1 and Player 2 Cannot be the Same.");
-                } else {
+                } else if (choice.equals("1")) {
                     TimedRaidWindow raid = new TimedRaidWindow();
                     raid.initializePlayers(currentUser, p2);
                     raid.startGame();
+                } else {
+                    RelicHunt relicHunt = new RelicHunt();
+                    relicHunt.initializePlayers(currentUser, p2);
+                    relicHunt.startGame();
                 }
             } catch (Exception e) {
                 System.out.println("Invalid selection. Returning to menu.");

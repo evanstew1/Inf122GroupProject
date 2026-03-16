@@ -173,10 +173,12 @@ public class GameMenu {
                     TimedRaidWindow raid = new TimedRaidWindow();
                     raid.initializePlayers(currentUser, p2);
                     raid.startGame();
+                    waitSeconds(5);
                 } else {
                     RelicHunt relicHunt = new RelicHunt();
                     relicHunt.initializePlayers(currentUser, p2);
                     relicHunt.startGame();
+                    waitSeconds(5);
                 }
             } catch (Exception e) {
                 System.out.println("Invalid selection. Returning to menu.");

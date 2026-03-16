@@ -1,11 +1,10 @@
 
-HOW TO RUN MY TEST PROMPT (IN MAIN)----------
+HOW TO RUN 
 
-NEED TO MAKE JAR BEFORE SUBMISSION
+java -jar GuildQuest.jar
 
 
 OR
 
-open terminal
 javac -d bin src/*.java
 java -cp bin Main

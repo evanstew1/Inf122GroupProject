@@ -136,6 +136,7 @@ public class TimedRaidWindow implements MiniAdventure {
         character2.addItem(bossLoot);
 
         System.out.println("The raid boss dropped " + bossLoot + "! Acquired by both users!");
+
     }
 
     private Character selectCharacter(User u, Scanner scanner) {

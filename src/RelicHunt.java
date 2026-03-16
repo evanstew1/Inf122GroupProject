@@ -7,8 +7,8 @@ public class RelicHunt implements MiniAdventure {
     private User p2;
 
     private static final int GRID_SIZE = 10;
-    private static final int ARTIFACT_COUNT = 10;
-    private static final int ARTIFACTS_TO_WIN = 6;
+    private static final int ARTIFACT_COUNT = 50;
+    private static final int ARTIFACTS_TO_WIN = 5;
 
     private boolean[][] hasArtifact;
     private boolean[][] accessed;
@@ -54,7 +54,7 @@ public class RelicHunt implements MiniAdventure {
             System.out.println("\n----- " + currentCharacter.getName() + "'s Turn -----");
             System.out.println("Score: " + character1.getName() + " " + p1Artifacts + " - " + p2Artifacts + " " + character2.getName());
             System.out.println("Squares not yet accessed: " + unaccessedCount);
-            System.out.print("Enter row (1-" + GRID_SIZE + ") and column (1-" + GRID_SIZE + "), e.g. 5 10: ");
+            System.out.print("Enter row (1-" + GRID_SIZE + ") and column (1-" + GRID_SIZE + "), e.g. 1 1: ");
 
             try {
                 String input = scanner.nextLine().trim();
